@@ -63,7 +63,7 @@ export default function Home() {
       } catch {
         // Catch and handle any unexpected errors
         const reply = {
-          role: "assistant",
+          role: "AI",
           content: "An error has occured.",
         };
 
@@ -163,7 +163,7 @@ export default function Home() {
           {messages.map((message, index) => (
             <div className="my-4 mx-2" key={index.toString()}>
               <p className="font-bold">
-                {message.role === "assistant" ? "GPT Chatbot" : "You"}
+                {message.role === "AI" ? "GPT Chatbot" : "You"}
               </p>
               <ReactMarkdown remarkPlugins={[remarkGfm]}>
                 {message.content}
