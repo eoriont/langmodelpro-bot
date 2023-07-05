@@ -15,12 +15,13 @@ export default async function handler(req, res) {
     // Sending a request to the OpenAI create chat completion endpoint
 
     // Setting parameters for our request
-    const createChatCompletionEndpointURL =
-      "https://api.openai.com/v1/chat/completions";
+    const createChatCompletionEndpointURL = process.env.LANGMODELPRO_URL
+
+    const history = generateHistory(messages.slice(0, messages.length - 1))
     const createChatCompletionReqParams = {
-      model: "gpt-3.5-turbo",
-      messages,
-    };
+      langchain_inputs: messages.at(-1).content,
+      history
+    }
 
     // Sending our request using the Fetch API
     const createChatCompletionRes = await fetch(
@@ -29,7 +30,8 @@ export default async function handler(req, res) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + process.env.OPENAI_API_KEY,
+          "openai-api-key": process.env.OPENAI_API_KEY,
+          "userid": process.env.USERID
         },
         body: JSON.stringify(createChatCompletionReqParams),
       }
@@ -50,20 +52,19 @@ export default async function handler(req, res) {
     }
 
     // Properties on the response body
-    const reply = createChatCompletionResBody.choices[0].message;
-    const usage = createChatCompletionResBody.usage;
+    const reply = createChatCompletionResBody.response;
 
     // Logging the results
-    console.log(`Create chat completion request was successful. Results:
-Replied message: 
+//     console.log(`Create chat completion request was successful. Results:
+// Replied message:
 
-${JSON.stringify(reply)}
+// ${JSON.stringify(reply)}
 
-Token usage:
-Prompt: ${usage.prompt_tokens}
-Completion: ${usage.completion_tokens}
-Total: ${usage.total_tokens}
-`);
+// Token usage:
+// Prompt: ${usage.prompt_tokens}
+// Completion: ${usage.completion_tokens}
+// Total: ${usage.total_tokens}
+// `);
 
     // Sending a successful response for our endpoint
     res.status(200).json({ reply });
@@ -86,4 +87,8 @@ Error: ${JSON.stringify(error.body)}
       },
     });
   }
+}
+
+function generateHistory(messages) {
+  return messages.map(e => `${e.role}: ${e.content}`).join("\n");
 }

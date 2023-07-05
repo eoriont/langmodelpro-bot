@@ -7,12 +7,7 @@ import remarkGfm from "remark-gfm";
 
 export default function Home() {
   // State variables
-  const [messages, setMessages] = useState([
-    {
-      role: "system",
-      content: "You are a chatbot that is helpful and replies concisely",
-    },
-  ]); // An array of the messages that make up the chat
+  const [messages, setMessages] = useState([]); // An array of the messages that make up the chat
   const [newMessageText, setNewMessageText] = useState("");
   const [loadingStatus, setLoadingStatus] = useState(false);
 
@@ -23,19 +18,14 @@ export default function Home() {
 
   // `onClick` event handler to create a new chat
   const onClick = () => {
-    setMessages([
-      {
-        role: "system",
-        content: "You are a chatbot that is helpful and replies concisely",
-      },
-    ]);
+    setMessages([]);
     setNewMessageText("");
   };
 
   // `onSubmit` event handler fired when the user submits a new message
   const onSubmit = async (event) => {
     event.preventDefault();
-    setMessages([...messages, { role: "user", content: newMessageText }]);
+    setMessages([...messages, { role: "Human", content: newMessageText }]);
     setLoadingStatus(true);
     setNewMessageText("");
   };
@@ -69,7 +59,7 @@ export default function Home() {
             ? responseBody.reply
             : responseBody.error.reply;
 
-        setMessages([...messages, reply]);
+        setMessages([...messages, {role: "AI", content: reply}]);
       } catch {
         // Catch and handle any unexpected errors
         const reply = {
@@ -123,12 +113,12 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>GPT Chatbot</title>
+        <title>LangModelPro Bot</title>
         <meta
           name="description"
           content={
-            "GPT Chatbot: A simple ChatGPT-powered chatbot" +
-            " built with Next.js and Tailwind CSS"
+            "LangModelPro Bot: A simple chatbot" +
+            "built from the LangModelPro API"
           }
         />
         <meta
@@ -141,47 +131,28 @@ export default function Home() {
       <main className="mx-auto h-screen max-w-full sm:max-w-3xl">
         <div className="py-8">
           <h1 className="text-center text-6xl font-bold text-blue-500">
-            GPT Chatbot
+            LangModelPro Bot
           </h1>
         </div>
 
-        {messages.length === 1 && (
+        {messages.length === 0 && (
           <div className="mx-10 mt-20 flex justify-center">
             <div>
               <p className="mb-2 font-bold">
-                GPT Chatbot is a basic chatbot built with the OpenAI API,
+                LangModelPro Bot is a basic chatbot built with the LangModelPro API,
                 Next.js and Tailwind CSS
               </p>
-              <p className="mb-32">
+              <p className="mb-2">
                 To start a conversation, type a message below and hit send
               </p>
-              <p className="mb-2">
-                Built by David Wu (
-                <a
-                  className="text-blue-500"
-                  target="_blank"
-                  href="https://twitter.com/david_j_wu"
-                >
-                  @david_j_wu
-                </a>
-                )
-              </p>
               <p>
-                Read the tutorial to build this chatbot{" "}
+                Modified from the following chatbot: {" "}
                 <a
                   className="text-blue-500"
                   target="_blank"
-                  href="https://davidwu.io/posts/building-a-chatbot-with-openais-chatgpt-api-nextjs-and-tailwind-css/"
+                  href="https://github.com/david-j-wu/gpt-chatbot"
                 >
-                  here
-                </a>{" "}
-                on{" "}
-                <a
-                  className="text-blue-500"
-                  target="_blank"
-                  href="https://davidwu.io/"
-                >
-                  davidwu.io
+                  GitHub Link
                 </a>
               </p>
             </div>
@@ -189,7 +160,7 @@ export default function Home() {
         )}
 
         <div>
-          {messages.slice(1).map((message, index) => (
+          {messages.map((message, index) => (
             <div className="my-4 mx-2" key={index.toString()}>
               <p className="font-bold">
                 {message.role === "assistant" ? "GPT Chatbot" : "You"}
@@ -207,11 +178,11 @@ export default function Home() {
           </div>
         )}
 
-        {!loadingStatus && messages.length > 1 && (
+        {!loadingStatus && messages.length > 0 && (
           <div className="mt-4 flex justify-center">
             <button
               className="h-11 rounded-md border-2 border-gray-500
-                         bg-gray-500 px-1 py-1 hover:border-gray-600 
+                         bg-gray-500 px-1 py-1 hover:border-gray-600
                          hover:bg-gray-600"
               onClick={onClick}
             >
@@ -228,14 +199,14 @@ export default function Home() {
         ></div>
 
         <div
-          className="fixed bottom-5 z-20 w-full max-w-full 
+          className="fixed bottom-5 z-20 w-full max-w-full
                      sm:max-w-3xl"
         >
           <form className="mx-2 flex items-end" onSubmit={onSubmit}>
             <textarea
               ref={textareaRef}
-              className="mr-2 grow resize-none rounded-md border-2 
-                       border-gray-400 p-2 focus:border-blue-600 
+              className="mr-2 grow resize-none rounded-md border-2
+                       border-gray-400 p-2 focus:border-blue-600
                          focus:outline-none"
               value={newMessageText}
               onChange={onChange}
@@ -254,7 +225,7 @@ export default function Home() {
             ) : (
               <button
                 className="h-11 rounded-md border-2 border-blue-600
-                         bg-blue-600 px-1 py-1 hover:border-blue-700 
+                         bg-blue-600 px-1 py-1 hover:border-blue-700
                          hover:bg-blue-700"
                 type="submit"
               >
