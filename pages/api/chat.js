@@ -1,3 +1,6 @@
+import path from "path";
+import { promises as fs } from "fs";
+
 // Logic for the ChatGPT-powered `/api/chat` endpoint
 export default async function handler(req, res) {
   try {
@@ -15,12 +18,16 @@ export default async function handler(req, res) {
     // Sending a request to the OpenAI create chat completion endpoint
 
     // Setting parameters for our request
-    const createChatCompletionEndpointURL = process.env.LANGMODELPRO_URL
+    const createChatCompletionEndpointURL = "https://langmodel.pro/lc_templates/api"
+
+    const jsonDirectory = path.join(process.cwd(), "json")
+    const fileContents = await fs.readFile(jsonDirectory + "/langmodelpro_template.json", 'utf8');
 
     const history = generateHistory(messages.slice(0, messages.length - 1))
     const createChatCompletionReqParams = {
       langchain_inputs: messages.at(-1).content,
-      history
+      history,
+      schema: fileContents
     }
 
     // Sending our request using the Fetch API
@@ -31,7 +38,6 @@ export default async function handler(req, res) {
         headers: {
           "Content-Type": "application/json",
           "openai-api-key": process.env.OPENAI_API_KEY,
-          "userid": process.env.USERID
         },
         body: JSON.stringify(createChatCompletionReqParams),
       }
@@ -55,16 +61,10 @@ export default async function handler(req, res) {
     const reply = createChatCompletionResBody.response;
 
     // Logging the results
-//     console.log(`Create chat completion request was successful. Results:
-// Replied message:
+    console.log(`Create chat completion request was successful. Results:
+Replied message:
 
-// ${JSON.stringify(reply)}
-
-// Token usage:
-// Prompt: ${usage.prompt_tokens}
-// Completion: ${usage.completion_tokens}
-// Total: ${usage.total_tokens}
-// `);
+${JSON.stringify(reply)}`);
 
     // Sending a successful response for our endpoint
     res.status(200).json({ reply });
@@ -80,10 +80,7 @@ Error: ${JSON.stringify(error.body)}
     // Sending an unsuccessful response for our endpoint
     res.status(error.statusCode || "500").json({
       error: {
-        reply: {
-          role: "assistant",
-          content: "An error has occurred.",
-        },
+        reply: "An error has occurred. Please check the logs!"
       },
     });
   }

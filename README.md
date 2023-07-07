@@ -4,7 +4,7 @@ Find the original chatbot here: https://github.com/david-j-wu/gpt-chatbot
 
 ## EASY: Deploy with Vercel
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Feoriont%2Flangmodelpro-bot&env=OPENAI_API_KEY,USERID,LANGMODELPRO_URL)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Feoriont%2Flangmodelpro-bot&env=OPENAI_API_KEY)
 
 ## Local: Use docker
 
@@ -14,9 +14,12 @@ Note: this method is quick but not meant for development.
 
 2. Make sure docker is on your system. https://docs.docker.com/engine/install/
 
-3. Ensure environment variables are correct. See [environment variables](#environment-variables)
+3. Add openai key to `.env.local`:
+```
+OPENAI_API_KEY=my-openai-api-key
+```
 
-3. Run the docker image
+4. Run the docker image
 ```
 docker build -t langmodelpro-bot . && docker run -p 3000:3000 langmodelpro-bot
 ```
@@ -46,7 +49,10 @@ npm install
 cp .env.sample .env.local
 ```
 
-4. Ensure environment variables in `.env.local` are correct. See [environment variables](#environment-variables)
+4. Add openai key to `.env.local`:
+```
+OPENAI_API_KEY=my-openai-api-key
+```
 
 6. Run the local development server:
 
@@ -57,20 +63,3 @@ npm run dev
 7. Open your browser of choice and head to [http://localhost:3000](http://localhost:3000) to see the web app live locally.
 
 8. Make desired changes to the web app. Next.js will automatically update the web app when you save changes to the source code.
-
-## Environment Variables
-
-These variables include the OpenAI API Key, LangModelPro Userid, and LangModelPro api url.
-Make sure not to publish these anywhere public.
-This data is sensitive and should be treated as such.
-
-1. Make a langmodelpro template for the bot. Go to https://langmodel.pro and sign in. Then, create a new LangChain Template with the contents of `langmodelpro_template.json` as the JSON content. (The name can be anything, such as "langmodelpro bot template") Then, take note of the "Post Link" found on the page.
-
-
-2. Add your OpenAI API key, LangModelPro userid, and LangModelPro url to the environment variables file `.env.local` and save the changes:
-
-```
-OPENAI_API_KEY=my-openai-api-key-1
-USERID=(found at https://langmodel.pro when signed in)
-LANGMODELPRO_URL=https://langmodel.pro/lc_templates/xxx/api
-```
