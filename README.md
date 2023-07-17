@@ -4,7 +4,7 @@ Find the original chatbot here: https://github.com/david-j-wu/gpt-chatbot
 
 ## EASY: Deploy with Vercel
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Feoriont%2Flangmodelpro-bot&env=OPENAI_API_KEY)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Feoriont%2Flangmodelpro-bot&env=OPENAI_API_KEY&project-name=langmodelpro-example-chatbot&repository-name=langmodelpro-example-chatbot)
 
 ## Local: Use docker
 
