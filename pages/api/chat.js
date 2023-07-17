@@ -18,6 +18,7 @@ export default async function handler(req, res) {
     // Sending a request to the OpenAI create chat completion endpoint
 
     // Setting parameters for our request
+    // const createChatCompletionEndpointURL = "http://localhost:80/api"
     const createChatCompletionEndpointURL = "https://langmodel.pro/lc_templates/api"
 
     const jsonDirectory = path.join(process.cwd(), "json")
